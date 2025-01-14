@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import pandas as pd
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
@@ -9,7 +9,9 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 # API Key của OpenAI
 load_dotenv()  # Load biến môi trường từ file .env
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(
+  api_key=os.environ['OPENAI_API_KEY'],  # this is also the default, it can be omitted
+)
 
 # Đọc file Excel và lưu dữ liệu trong bộ nhớ
 dataframe = None
@@ -60,7 +62,7 @@ def ask():
 
     try:
         # Gửi yêu cầu đến OpenAI
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful data analyst."},
