@@ -35,7 +35,7 @@ def upload_file():
     file.save(filepath)
 
     try:
-        dataframe = pd.read_csv(filepath)
+        dataframe = pd.read_excel(filepath)
         return jsonify({"message": "File uploaded successfully", "columns": dataframe.columns.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
