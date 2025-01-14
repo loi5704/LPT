@@ -74,7 +74,7 @@ def ask():
         )
 
         # Lấy câu trả lời và trả về cho người dùng
-        reply = response['answers'][0]
+        reply = response.choices[0].message['content']
         return jsonify({"reply": reply})
 
     except Exception as e:
