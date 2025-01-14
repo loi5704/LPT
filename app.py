@@ -35,7 +35,7 @@ def upload_file():
     file.save(filepath)
 
     try:
-        dataframe = pd.read_excel(filepath)
+        dataframe = pd.read_csv(filepath)
         return jsonify({"message": "File uploaded successfully", "columns": dataframe.columns.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -51,7 +51,7 @@ def ask():
         return jsonify({"error": "Question is required"}), 400
 
     # Tạo prompt dựa trên dữ liệu từ file Excel
-    data_preview = dataframe.head(5).to_string()  # Xem trước 5 dòng đầu của dữ liệu
+    data_preview = dataframe.head(10).to_string()  # Xem trước 5 dòng đầu của dữ liệu
     prompt = f"""
     Dưới đây là một phần của dữ liệu từ file Excel mà người dùng đã tải lên:
     {data_preview}
@@ -61,17 +61,20 @@ def ask():
     """
 
     try:
-        # Gửi yêu cầu đến OpenAI
+
+        # Gửi yêu cầu trả lời câu hỏi dựa trên tệp đã tải lên
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful data analyst."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=300
+            model="text-davinci-003",  # Chọn mô hình
+            messages=[{
+                "role": "system", "content": "You are a helpful data analyst."
+            }, {
+                "role": "user", "content": prompt
+            }],
+            max_tokens=500,  # Số tokens tối đa
         )
 
-        reply = response['choices'][0]['message']['content']
+        # Lấy câu trả lời và trả về cho người dùng
+        reply = response['answers'][0]
         return jsonify({"reply": reply})
 
     except Exception as e:
