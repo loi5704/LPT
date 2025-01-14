@@ -3,7 +3,6 @@ pandas
 openai
 python-dotenv
 gunicorn
-request 
+requests
 jsonify
-render_template
 openpyxl
