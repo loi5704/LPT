@@ -64,7 +64,7 @@ def ask():
 
         # Gửi yêu cầu trả lời câu hỏi dựa trên tệp đã tải lên
         response = client.chat.completions.create(
-            model="text-davinci-003",  # Chọn mô hình
+            model="gpt-3.5-turbo",  # Chọn mô hình
             messages=[{
                 "role": "system", "content": "You are a helpful data analyst."
             }, {
