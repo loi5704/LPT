@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Excel Analysis</title>
+</head>
+<body>
+    <h1>GPT Phân Tích Dữ Liệu Excel</h1>
+
+    <!-- Upload File -->
+    <h2>1. Tải lên file Excel</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit">Tải lên</button>
+    </form>
+    <div id="uploadResult"></div>
+
+    <!-- Hỏi GPT -->
+    <h2>2. Đặt câu hỏi</h2>
+    <textarea id="question" rows="4" cols="50" placeholder="Nhập câu hỏi của bạn..."></textarea>
+    <button id="askBtn">Gửi câu hỏi</button>
+    <div id="response"></div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const askBtn = document.getElementById('askBtn');
+
+        // Xử lý tải file
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(uploadForm);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const uploadResult = document.getElementById('uploadResult');
+            if (result.error) {
+                uploadResult.innerText = `Lỗi: ${result.error}`;
+            } else {
+                uploadResult.innerText = `Tải lên thành công! Các cột: ${result.columns.join(', ')}`;
+            }
+        });
+
+        // Xử lý câu hỏi
+        askBtn.addEventListener('click', async () => {
+            const question = document.getElementById('question').value;
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question })
+            });
+
+            const result = await response.json();
+            const responseDiv = document.getElementById('response');
+            if (result.error) {
+                responseDiv.innerText = `Lỗi: ${result.error}`;
+            } else {
+                responseDiv.innerText = `GPT trả lời: ${result.reply}`;
+            }
+        });
+    </script>
+</body>
+</html>
