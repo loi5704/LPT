@@ -51,7 +51,7 @@ def ask():
         return jsonify({"error": "Question is required"}), 400
 
     # Tạo prompt dựa trên dữ liệu từ file Excel
-    data_preview = dataframe[0:100]  # Xem trước 5 dòng đầu của dữ liệu
+    data_preview = dataframe.head(5).to_string()  # Xem trước 5 dòng đầu của dữ liệu
     prompt = f"""
     Dưới đây là một phần của dữ liệu từ file Excel mà người dùng đã tải lên:
     {data_preview}
@@ -70,7 +70,7 @@ def ask():
             }, {
                 "role": "user", "content": prompt
             }],
-            max_tokens=100000,  # Số tokens tối đa
+            max_tokens=4096,  # Số tokens tối đa
         )
 
         # Lấy câu trả lời và trả về cho người dùng
