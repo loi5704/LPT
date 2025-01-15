@@ -70,7 +70,7 @@ def ask():
             }, {
                 "role": "user", "content": prompt
             }],
-            max_tokens=4096,  # Số tokens tối đa
+            max_tokens=500,  # Số tokens tối đa
         )
 
         # Lấy câu trả lời và trả về cho người dùng
