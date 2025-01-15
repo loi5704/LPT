@@ -39,11 +39,6 @@ def upload_file():
         return jsonify({"message": "File uploaded successfully", "columns": dataframe.columns.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
-
-conversation = [
-    {"role": "system", "content": "You are a helpful assistant for data analysis."},
-]
 
 @app.route('/ask', methods=['POST'])
 def ask():
@@ -56,17 +51,26 @@ def ask():
         return jsonify({"error": "Question is required"}), 400
 
     # Tạo prompt dựa trên dữ liệu từ file Excel
-    conversation.append({"role": "user", "content": f"Đây là dữ liệu: {dataframe[:500].to_string()}"})
-    conversation.append({"role": "user", "content": user_question})
-    
+    data_preview = dataframe[0:100]  # Xem trước 5 dòng đầu của dữ liệu
+    prompt = f"""
+    Dưới đây là một phần của dữ liệu từ file Excel mà người dùng đã tải lên:
+    {data_preview}
+
+    Người dùng hỏi: {user_question}
+    Hãy trả lời dựa trên dữ liệu trong file này.
+    """
+
     try:
 
         # Gửi yêu cầu trả lời câu hỏi dựa trên tệp đã tải lên
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",  # Chọn mô hình
-            messages=conversation,  # Truyền dữ liệu vào mô hình
-            max_tokens=4096
-                # Số tokens tối đa
+            messages=[{
+                "role": "system", "content": "You are a helpful data analyst."
+            }, {
+                "role": "user", "content": prompt
+            }],
+            max_tokens=100000,  # Số tokens tối đa
         )
 
         # Lấy câu trả lời và trả về cho người dùng
