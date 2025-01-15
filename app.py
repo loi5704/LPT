@@ -20,11 +20,11 @@ dataframe = None
 def index():
     return render_template('index.html')
 
-@app.route('/upload', methods=['POST'])
 
 @app.route('/ask', methods=['POST'])
 def ask():
     file = request.files['file']
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
     try:
@@ -33,8 +33,6 @@ def ask():
         return jsonify({"error": str(e)}), 500
 
     # Lưu file vào thư mục uploads và đọc nội dung
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(filepath)
     if dataframe is None:
         return jsonify({"error": "No data available. Please upload a file first."}), 400
 
