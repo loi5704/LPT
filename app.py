@@ -21,28 +21,20 @@ def index():
     return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
-def upload_file():
-    global dataframe
-    if 'file' not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
 
+@app.route('/ask', methods=['POST'])
+def ask():
     file = request.files['file']
     if file.filename == '':
         return jsonify({"error": "No file selected"}), 400
+    try:
+        dataframe = pd.read_excel(filepath)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     # Lưu file vào thư mục uploads và đọc nội dung
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)
-
-    try:
-        dataframe = pd.read_excel(filepath)
-        return jsonify({"message": "File uploaded successfully", "columns": dataframe.columns.tolist()})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/ask', methods=['POST'])
-def ask():
-    global dataframe
     if dataframe is None:
         return jsonify({"error": "No data available. Please upload a file first."}), 400
 
@@ -51,7 +43,7 @@ def ask():
         return jsonify({"error": "Question is required"}), 400
 
     # Tạo prompt dựa trên dữ liệu từ file Excel
-    data_preview = dataframe.head(5).to_string()  # Xem trước 5 dòng đầu của dữ liệu
+    data_preview = dataframe  # Xem trước 5 dòng đầu của dữ liệu
     prompt = f"""
     Dưới đây là một phần của dữ liệu từ file Excel mà người dùng đã tải lên:
     {data_preview}
@@ -70,7 +62,7 @@ def ask():
             }, {
                 "role": "user", "content": prompt
             }],
-            max_tokens=500,  # Số tokens tối đa
+            max_tokens=10000,  # Số tokens tối đa
         )
 
         # Lấy câu trả lời và trả về cho người dùng
