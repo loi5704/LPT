@@ -44,7 +44,6 @@ def upload_file():
 conversation = [
     {"role": "system", "content": "You are a helpful assistant for data analysis."},
     {"role": "user", "content": f"Đây là dữ liệu: {dataframe[:500].to_string()}"},
-    {"role": "user", "content": f"Phần tiếp theo của dữ liệu: {dataframe[500:].to_string()}"},
 ]
 
 @app.route('/ask', methods=['POST'])
