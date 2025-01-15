@@ -6,6 +6,7 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
+DEFAULT_FILE_PATH = 'uploads/Data_final.xlsx'
 
 # API Key của OpenAI
 load_dotenv()  # Load biến môi trường từ file .env
@@ -15,6 +16,16 @@ client = OpenAI(
 
 # Đọc file Excel và lưu dữ liệu trong bộ nhớ
 dataframe = None
+
+def load_default_file():
+    """Hàm để đọc file mặc định từ đường dẫn cố định."""
+    global dataframe
+    try:
+        dataframe = pd.read_excel(DEFAULT_FILE_PATH)
+        print(f"Đã đọc dữ liệu từ file mặc định: {DEFAULT_FILE_PATH}")
+    except Exception as e:
+        print(f"Lỗi khi đọc file mặc định: {e}")
+        dataframe = None
 
 @app.route('/')
 def index():
