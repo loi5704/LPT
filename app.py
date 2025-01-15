@@ -106,4 +106,5 @@ def ask():
 
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    load_default_file()
     app.run(debug=True)
