@@ -22,7 +22,27 @@
     <div id="response"></div>
 
     <script>
-        const askBtn = document.getElementById('askBtn');   
+        const uploadForm = document.getElementById('uploadForm');
+        const askBtn = document.getElementById('askBtn');
+
+        // Xử lý tải file
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(uploadForm);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            const uploadResult = document.getElementById('uploadResult');
+            if (result.error) {
+                uploadResult.innerText = `Lỗi: ${result.error}`;
+            } else {
+                uploadResult.innerText = `Tải lên thành công! Các cột: ${result.columns.join(', ')}`;
+            }
+        });
 
         // Xử lý câu hỏi
         askBtn.addEventListener('click', async () => {
