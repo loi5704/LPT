@@ -8,6 +8,13 @@
 <body>
     <h1>GPT Phân Tích Dữ Liệu</h1>
 
+    <h2>1. Tải lên file Excel</h2>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit">Tải lên</button>
+    </form>
+    <div id="uploadResult"></div>
+
     <!-- Hỏi GPT -->
     <h2>Đặt câu hỏi</h2>
     <textarea id="question" rows="4" cols="50" placeholder="Nhập câu hỏi của bạn..."></textarea>

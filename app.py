@@ -20,17 +20,37 @@ dataframe = None
 def index():
     return render_template('index.html')
 
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    global dataframe
+    if 'file' not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No file selected"}), 400
+
+    # Lưu file vào thư mục uploads và đọc nội dung
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    file.save(filepath)
+
+    try:
+        dataframe = pd.read_excel(filepath)
+        return jsonify({"message": "File uploaded successfully"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/ask', methods=['POST'])
 def ask():
-    file = request.files['file']
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    if file.filename == '':
-        return jsonify({"error": "No file selected"}), 400
-    try:
-        dataframe = pd.read_excel(filepath)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    global dataframe
+    if dataframe is None:
+        return jsonify({"error": "No data available. Please upload a file first."}), 400
+
+    user_question = request.json.get('question', '')
+
+    if not user_question:
+        return jsonify({"error": "Question is required"}), 400
 
     # Lưu file vào thư mục uploads và đọc nội dung
     if dataframe is None:
