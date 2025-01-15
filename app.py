@@ -6,7 +6,7 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
-DEFAULT_FILE_PATH = 'uploads/Data_final.xlsx'
+DEFAULT_FILE_PATH = "./uploads/Data_final.xlsx"  # Đường dẫn file mặc định
 
 # API Key của OpenAI
 load_dotenv()  # Load biến môi trường từ file .env
