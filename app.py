@@ -62,8 +62,11 @@ def ask():
 
     # Tạo prompt dựa trên dữ liệu từ file Excel
     data_preview = dataframe.head(5).to_string()  # Xem trước 5 dòng đầu của dữ liệu
+    data_columns_number= len(dataframe.columns)
+    data_rows_number = len(dataframe)
+
     prompt = f"""
-    Dưới đây là một phần của dữ liệu từ file Excel mà người dùng đã tải lên:
+    Dưới đây là một phần của dữ liệu gồm {data_columns_number} cột, {data_rows_number} dòng từ file Excel mà người dùng đã tải lên:
     {data_preview}
 
     Người dùng hỏi: {user_question}

@@ -3,23 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Đặt phông chữ mặc định */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Phần chứa nội dung */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        /* Tiêu đề trang */
+        h1 {
+            text-align: center;
+            margin: 5px 0;
+            color: #4CAF50;
+        }
+
+        /* Phần chứa nội dung */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: none;
+        }
+
+        #uploadResult, #response {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+
+        #uploadResult.error, #response.error {
+            border-left: 4px solid #f44336;
+            color: #f44336;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
     <title>GPT Excel Analysis</title>
 </head>
 <body>
-    <h1>GPT Phân Tích Dữ Liệu</h1>
+    <div class="container">
+        <h1>GPT Phân Tích Dữ Liệu</h1>
 
-    <h2>1. Tải lên file Excel</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".xlsx" required>
-        <button type="submit">Tải lên</button>
-    </form>
-    <div id="uploadResult"></div>
-
-    <!-- Hỏi GPT -->
-    <h2>Đặt câu hỏi</h2>
-    <textarea id="question" rows="4" cols="50" placeholder="Nhập câu hỏi của bạn..."></textarea>
-    <button id="askBtn">Gửi câu hỏi</button>
-    <div id="response"></div>
+        <h2>1. Tải lên file Excel</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Tải lên</button>
+        </form>
+        <div id="uploadResult"></div>
+    
+        <!-- Hỏi GPT -->
+        <h2>Đặt câu hỏi</h2>
+        <textarea id="question" rows="4" cols="50" placeholder="Nhập câu hỏi của bạn..."></textarea>
+        <button id="askBtn">Gửi câu hỏi</button>
+        <div id="response"></div>
+    </div>
+    
 
     <script>
         const uploadForm = document.getElementById('uploadForm');
