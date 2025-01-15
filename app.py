@@ -65,6 +65,7 @@ def ask():
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",  # Chọn mô hình
             messages=conversation,  # Truyền dữ liệu vào mô hình
+            max_tokens=4096
                 # Số tokens tối đa
         )
 
